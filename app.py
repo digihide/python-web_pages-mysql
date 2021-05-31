@@ -59,9 +59,28 @@ def index():
         return redirect('/')
 
 
+# 作成
 @app.route('/create')
 def create():
     return render_template('create.html')
+
+
+# 詳細
+@app.route('/detail/<int:id>')
+def read(id):
+    post = Post.query.get(id)
+
+    return render_template('detail.html', post=post)
+
+
+# 削除
+@app.route('/delete/<int:id>')
+def delete(id):
+    post = Post.query.get(id)
+
+    db.session.delete(post)
+    db.session.commit()
+    return redirect('/')
 
 
 if __name__ == "__main__":
