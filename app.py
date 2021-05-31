@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR   # MySQLのテーブルを作る時に必要
 
 app = Flask(__name__)
@@ -42,8 +42,8 @@ db.create_all()
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        posts = Post.query.all()
-        return render_template('index.html', posts=posts)
+        posts = Post.query.order_by(Post.due).all()
+        return render_template('index.html', posts=posts, today=date.today())
 
     else:
         title = request.form.get('title')
